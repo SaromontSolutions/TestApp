@@ -30,15 +30,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install ESLint
-        run: |
-          npm install eslint@8.10.0
-          npm install @microsoft/eslint-formatter-sarif@3.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your desired Node.js version
+          
+      - name: Install Dependencies # ESLint?
+        run: npm install
+        working-directory: TestAppJs
 
-      - name: Run ESLint and generate SARIF
-        run: npx eslint . -f sarif -o eslint-results.sarif
+      - name: Run ESLint with flat config
+        run: npx eslint . --config eslint.config.mjs -f sarif -o eslint-results.sarif
+        working-directory: TestAppJs
 
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: eslint-results.sarif
+          sarif_file: TestAppJs/eslint-results.sarif
