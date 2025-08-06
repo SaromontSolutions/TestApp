@@ -1,4 +1,4 @@
-
+import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig({
@@ -8,7 +8,7 @@ export default defineConfig({
     es2021: true,
     jest: true,
   },
-  extends: ["eslint:recommended"],
+  configs: [js.configs.recommended],
   parserOptions: {
     ecmaVersion: 2021,
     sourceType: "module",
