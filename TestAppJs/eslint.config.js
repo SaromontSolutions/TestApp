@@ -1,20 +1,24 @@
 import js from "@eslint/js";
+import globals from "globals";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig({
-  env: {
-    browser: true,
-    node: true,
-    es2021: true,
-    jest: true,
-  },
-  configs: [js.configs.recommended],
-  parserOptions: {
+  languageOptions: {
     ecmaVersion: 2021,
     sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
+    globals: {
+      ...globals.browser,
+      ...globals.node,
+      ...globals.jest,
     },
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
+  },
+  linterOptions: {
+    reportUnusedDisableDirectives: true,
   },
   rules: {
     "no-console": "warn",
@@ -22,4 +26,6 @@ export default defineConfig({
     "quotes": ["error", "double"],
     "no-unused-vars": "warn",
   },
+  plugins: [],
+  configs: [js.configs.recommended],
 });
