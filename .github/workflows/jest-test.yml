@@ -15,11 +15,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20' # Or your desired Node.js version
+          
       - name: Install Dependencies
         run: npm install
+        working-directory: TestAppJs
+        
       - name: Run Jest Tests
         run: npm test
+        working-directory: TestAppJs
