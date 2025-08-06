@@ -2,6 +2,9 @@ import js from "@eslint/js";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
 
+// import env presets from @eslint/js
+const { env: { browser, node, jest } } = js;
+
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
@@ -13,26 +16,28 @@ export default defineConfig([
         ecmaVersion: 2021,
         sourceType: "module",
         ecmaFeatures: {
-          jsx: true, // Enable JSX parsing
+          jsx: true,
         },
       },
+      // Spread the browser env here
+      env: browser,
     },
   },
   {
     files: ["**/*.test.js"],
     languageOptions: {
       env: {
-        jest: true,  // Recognize Jest globals like 'test' and 'expect'
-        node: true,  // Recognize 'require' and 'module'
+        ...jest,
+        ...node,
       },
     },
   },
   {
-    files: ["**/*.js", "**/*.jsx"],
+    files: ["**/*.{js,jsx}"],
     languageOptions: {
       env: {
-        browser: true,
-        node: true,
+        ...browser,
+        ...node,
       },
     },
   },
