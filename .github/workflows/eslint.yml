@@ -40,7 +40,7 @@ jobs:
         working-directory: TestAppJs
 
       - name: Run ESLint with flat config
-        run: npx eslint . --config eslint.config.mjs -f sarif -o eslint-results.sarif
+        run: npx eslint . --config eslint.config.mjs -f node_modules/eslint-sarif-formatter/sarif.js -o eslint-results.sarif
         working-directory: TestAppJs
 
       - name: Upload SARIF to GitHub
