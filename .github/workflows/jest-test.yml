@@ -1,0 +1,25 @@
+# Developed to run Jest tests
+name: "Jest Test"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '34 4 * * 0'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your desired Node.js version
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Jest Tests
+        run: npm test
