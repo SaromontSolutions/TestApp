@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -18,3 +19,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+=======
+import { PaperProvider } from 'react-native-paper';
+import AppNavigator from './Navigation/AppNavigator';
+
+export default function App() {
+  return (
+  <PaperProvider>
+    <AppNavigator />
+  </PaperProvider>
+  );
+}
+>>>>>>> Stashed changes
