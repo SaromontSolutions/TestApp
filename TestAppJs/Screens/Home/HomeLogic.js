@@ -1,14 +1,15 @@
-import { Alert } from "react-native";
+import React from 'react';
 import HomeUI from "./HomeUI";
 
-  export default function HomeLogic() {
+  //gets navigation from React navigation because its a screen
+  export default function HomeLogic({ navigation }) {
     const handlePress = () => {
-      Alert.alert("Btn pressed");
+      navigation.navigate('Form');
     };
 
     return (
-        <>
+      <>
         <HomeUI onButtonPress={ handlePress } />
-        </>
+      </>
     );
   }

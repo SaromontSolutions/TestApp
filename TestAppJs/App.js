@@ -1,6 +1,10 @@
-
-import HomeLogic from "./Screens/Home/HomeLogic";
+import { PaperProvider } from 'react-native-paper';
+import AppNavigator from './Navigation/AppNavigator';
 
 export default function App() {
-  return <HomeLogic />;
+  return (
+  <PaperProvider>
+    <AppNavigator />
+  </PaperProvider>
+  );
 }
