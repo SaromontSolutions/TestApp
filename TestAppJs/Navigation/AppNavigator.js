@@ -3,6 +3,7 @@ import React from 'react';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack'; //Android doesn't have modals in RN so cards are used instead
 import { NavigationContainer } from '@react-navigation/native';
 
+import AuthLogic from '../Screens/Auth/AuthLogic';
 import HomeLogic from '../Screens/Home/HomeLogic';
 import FormLogic from '../Screens/Form/FormLogic';
 
@@ -12,6 +13,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Auth" component={AuthLogic} />
         <Stack.Screen name="Home" component={HomeLogic} />
         <Stack.Screen
           name="Form"

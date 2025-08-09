@@ -21,6 +21,7 @@
     "@supabase/supabase-js": "^2.54.0",
     "expo": "~53.0.20",
     "expo-status-bar": "~2.2.3",
+    "firebase": "^12.1.0",
     "jest": "^30.0.5",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@eslint/js": "^9.33.0",
     "@types/react": "~19.0.10",
     "typescript": "~5.8.3"
   },

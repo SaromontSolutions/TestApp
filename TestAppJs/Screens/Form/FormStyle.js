@@ -19,7 +19,6 @@ const FormStyle = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
-
   },
 
     input: {
