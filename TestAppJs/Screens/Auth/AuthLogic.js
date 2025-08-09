@@ -1,33 +1,38 @@
-// Handles all Firebase Auth state and logic
 import React, { useState, useEffect } from 'react';
-import { auth, googleProvider } from '../../firebase/firebaseConfig';
+import { useNavigation } from '@react-navigation/native'; 
 import { 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
+  signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
-  signInWithPopup,
-  signInAnonymously
-} from 'firebase/auth';
+  signInAnonymously,
+  onAuthStateChanged
+} from 'firebase/auth'; //Package
+
+import { auth } from '../../firebase/firebaseConfig';  // adjust path as needed
+
+import { useGoogleAuth } from '../../firebase/googleAuthService';  // your hook
 
 import AuthUI from './AuthUI';
 
 export default function AuthLogic() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
-  const [modalVisible, setModalVisible] = useState(true);
+  const navigation = useNavigation();
+
+  // Use the hook here
+  const { promptAsync, error: googleError } = useGoogleAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (initializing) setInitializing(false);
-      if (currentUser) setModalVisible(false); // close modal if signed in
-      else setModalVisible(true);
+      if (currentUser) {
+        navigation.replace('Home');
+      }
     });
     return unsubscribe;
-  }, []);
+  }, [initializing, navigation]);
 
-  // Email/password login
   const handleLogin = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -36,7 +41,6 @@ export default function AuthLogic() {
     }
   };
 
-  // Email/password signup
   const handleSignup = async (email, password) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -45,16 +49,15 @@ export default function AuthLogic() {
     }
   };
 
-  // Sign in with Google popup
-  const handleGoogleSignin = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (e) {
-      alert(`Google sign-in failed: ${e.message}`);
+  // Now your Google sign-in just triggers the hook's promptAsync
+  const handleGoogleSignin = () => {
+    if (promptAsync) {
+      promptAsync();
+    } else {
+      alert("Google sign-in not ready");
     }
   };
 
-  // Continue as guest (anonymous)
   const handleContinueAsGuest = async () => {
     try {
       await signInAnonymously(auth);
@@ -63,11 +66,10 @@ export default function AuthLogic() {
     }
   };
 
-  // Logout
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setModalVisible(true);
+      setUser(null);
     } catch (e) {
       alert(`Logout failed: ${e.message}`);
     }
@@ -75,24 +77,16 @@ export default function AuthLogic() {
 
   if (initializing) return null;
 
-  if (!user) {
-    return (
-      <AuthUI
-        visible={modalVisible}
-        onLogin={handleLogin}
-        onSignup={handleSignup}
-        onGoogleSignin={handleGoogleSignin}
-        onContinueAsGuest={handleContinueAsGuest}
-      />
-    );
-  }
-
   return (
-    <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-      <Text>Welcome, {user.isAnonymous ? "Guest" : user.email}</Text>
-      <TouchableOpacity onPress={handleLogout} style={{marginTop: 20, padding: 10, backgroundColor: '#007BFF', borderRadius: 8}}>
-        <Text style={{color:'white'}}>Logout</Text>
-      </TouchableOpacity>
-    </View>
+    <AuthUI
+      user={user}
+      onLogin={handleLogin}
+      onSignup={handleSignup}
+      onGoogleSignin={handleGoogleSignin}
+      onContinueAsGuest={handleContinueAsGuest}
+      onLogout={handleLogout}
+      googleError={googleError}  // optionally pass error to UI
+    />
   );
 }
+

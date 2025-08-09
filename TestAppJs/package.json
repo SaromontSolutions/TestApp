@@ -12,14 +12,17 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
-    "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-firebase/app": "^23.0.0",
     "@react-native-firebase/auth": "^23.0.0",
+    "@react-native-google-signin/google-signin": "^15.0.0",
     "@react-native-picker/picker": "^2.11.1",
     "@react-navigation/native": "^7.1.17",
     "@react-navigation/stack": "^7.4.5",
     "@supabase/supabase-js": "^2.54.0",
     "expo": "~53.0.20",
+    "expo-auth-session": "~6.2.1",
+    "expo-random": "^14.0.1",
     "expo-status-bar": "~2.2.3",
     "firebase": "^12.1.0",
     "jest": "^30.0.5",
@@ -35,6 +38,7 @@
     "@babel/core": "^7.20.0",
     "@eslint/js": "^9.33.0",
     "@types/react": "~19.0.10",
+    "@types/react-native": "^0.72.8",
     "typescript": "~5.8.3"
   },
   "private": true

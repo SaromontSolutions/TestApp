@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import FormStyle from '../Form/FormStyle';
+import GoogleSignInButton from './GoogleSignInButton'; // adjust relative path
 
-export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onContinueAsGuest }) {
+export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onContinueAsGuest, onLogout }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignup, setIsSignup] = useState(false);
@@ -53,6 +54,10 @@ export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onCont
           textContentType="password"
           autoComplete="password"
         />
+
+        
+        <GoogleSignInButton />
+
 
         <TouchableOpacity
           style={FormStyle.button}
