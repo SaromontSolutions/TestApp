@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { TextInput, Button } from "react-native-paper";
 import FormStyle from '../Form/FormStyle';
-import GoogleSignInButton from './GoogleSignInButton'; // adjust relative path
+import { useGoogleAuth } from '../../firebase/googleAuthService';  // adjust path as needed
 
-export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onContinueAsGuest, onLogout }) {
+export default function AuthUI({ user, onLogin, onSignup, onContinueAsGuest, onLogout }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignup, setIsSignup] = useState(false);
+
+  const { request, promptAsync, error: googleError } = useGoogleAuth();
 
   // If user logged in, show welcome + logout
   if (user) {
@@ -16,12 +18,7 @@ export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onCont
           <Text style={{ fontSize: 22, marginBottom: 15 }}>
             Welcome, {user.isAnonymous ? 'Guest' : user.email}
           </Text>
-          <TouchableOpacity
-            style={FormStyle.button}
-            onPress={() => onLogout && onLogout()}
-          >
-            <Text style={FormStyle.buttonText}>Logout</Text>
-          </TouchableOpacity>
+          <Button mode="contained" onPress={() => onLogout && onLogout()} style={{ marginTop: 10 }}>Logout</Button>
         </View>
       </View>
     );
@@ -32,10 +29,11 @@ export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onCont
     <View style={FormStyle.container}>
       <View style={FormStyle.modalCard}>
         <Text style={{ fontSize: 22, marginBottom: 15, fontWeight: 'bold' }}>
-          {isSignup ? 'Sign Up' : 'Sign In'}
+          Sign In
         </Text>
 
         <TextInput
+          mode="outlined"
           style={FormStyle.input}
           placeholder="Email"
           value={email}
@@ -46,6 +44,7 @@ export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onCont
           autoComplete="email"
         />
         <TextInput
+          mode="outlined"
           style={FormStyle.input}
           placeholder="Password"
           secureTextEntry
@@ -55,38 +54,19 @@ export default function AuthUI({ user, onLogin, onSignup, onGoogleSignin, onCont
           autoComplete="password"
         />
 
-        
-        <GoogleSignInButton />
 
+        <Button mode="contained" onPress={() => onLogin(email, password)} style={{ marginTop: 15 }}>Sign In</Button>
 
-        <TouchableOpacity
-          style={FormStyle.button}
-          onPress={() => (isSignup ? onSignup(email, password) : onLogin(email, password))}
-        >
-          <Text style={FormStyle.buttonText}>{isSignup ? 'Sign Up' : 'Sign In'}</Text>
-        </TouchableOpacity>
+        <Button mode="contained" buttonColor="#DB4437" onPress={() => promptAsync()} disabled={!request} style={{ marginTop: 10 }}>Sign In with Google</Button>
 
-        <TouchableOpacity
-          style={[FormStyle.button, { backgroundColor: '#DB4437', marginTop: 10 }]}
-          onPress={onGoogleSignin}
-        >
-          <Text style={FormStyle.buttonText}>Sign In with Google</Text>
-        </TouchableOpacity>
+        {googleError && (
+          <Text style={{ color: 'red', marginTop: 5 }}>{googleError.message}</Text>
+        )}
 
-        <TouchableOpacity
-          style={[FormStyle.button, { backgroundColor: '#6c757d', marginTop: 10 }]}
-          onPress={onContinueAsGuest}
-        >
-          <Text style={FormStyle.buttonText}>Continue as Guest</Text>
-        </TouchableOpacity>
+        <Button mode="contained" buttonColor="#6c757d" onPress={onContinueAsGuest} style={{ marginTop: 10 }}>Continue as Guest</Button>
 
-        <TouchableOpacity
-          onPress={() => setIsSignup(!isSignup)}
-          style={{ marginTop: 15, alignSelf: 'center' }}
-        >
-          <Text style={{ color: '#007BFF' }}>
-            {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-          </Text>
+        <TouchableOpacity onPress={() => onSignup(email, password)} style={{ marginTop: 15, alignSelf: 'center' }}>
+          <Text style={{ color: '#007BFF' }}>Don't have an account? Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
