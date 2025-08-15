@@ -14,10 +14,6 @@ import { ANDROID_CLIENT_IDS } from '../config'; //Platform specific stuff
 // Required for expo-auth-session on React Native to handle redirect properly 
 WebBrowser.maybeCompleteAuthSession(); 
 
-console.log('Constants.executionEnvironment:', Constants.executionEnvironment);
-console.log('Constants.appOwnership:', Constants.appOwnership);
-console.log('__DEV__:', __DEV__);
-
 // Function to get the right Android client ID
 function getAndroidClientId() {
   if (!ANDROID_CLIENT_IDS) return null;
@@ -38,16 +34,17 @@ const clientId = Platform.select({
 });
 
 // is ExpoGo
-const useProxy = __DEV__;
-const scheme = !useProxy ? 'com.myapp' : undefined; // only set scheme for standalone
+//const useProxy = __DEV__;
+//const scheme = !useProxy ? 'com.myapp' : undefined; // only set scheme for standalone
+const isExpoGo = __DEV__; 
+console.log('isExpoGo:', isExpoGo)
 
-//const redirectUri = 'https://auth.expo.io/@saromontsolutions/TestAppJs'; 
-// const redirectUri = AuthSession.makeRedirectUri({
-//   scheme,
-//   useProxy,
-// });
+const redirectUri = AuthSession.makeRedirectUri(
+  { 
+    useProxy: isExpoGo, //bad
+    projectNameForProxy: "@saromontsolutions/TestAppJs",
+  });
 
-const redirectUri = AuthSession.makeRedirectUri({ useProxy: true });
 console.log('Redirect URI:', redirectUri);
 
 /** * Hook to handle Google sign-in with Firebase using Expo Auth Session. * Returns: * - promptAsync: function to trigger Google sign-in flow * - user: current Firebase user or null * - error: any error encountered during sign-in */ 
@@ -58,7 +55,7 @@ export function useGoogleAuth() {
       //clientId: "698263135379-jp84uimu0shre49f375drod81n3k7rsg.apps.googleusercontent.com",
       clientId,
       redirectUri, 
-    }, { useProxy} );
+    });
     
     const [error, setError] = useState(null); 
     useEffect(() => { if (!response){ return; } 
