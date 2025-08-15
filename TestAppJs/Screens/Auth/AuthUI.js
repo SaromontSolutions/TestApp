@@ -8,7 +8,7 @@ export default function AuthUI({ user, onLogin, onSignup, onContinueAsGuest, onL
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { request, promptAsync, error: googleError } = useGoogleAuth();
+  const { request = null, promptAsync = () => {}, error: googleError = null } = useGoogleAuth() || {};
 
   // If user logged in, show welcome + logout
   if (user) {

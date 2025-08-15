@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar"; //Top of screen bar
 import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
-import IndexStyle from "./IndexUI";
+import IndexStyle from "./IndexStyles";
 
 export default function IndexUI ({ onButtonPress }) {
   return (
